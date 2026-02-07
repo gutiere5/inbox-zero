@@ -36,6 +36,9 @@ To help you spend less time in your inbox, so you can focus on what matters most
 export NEXT_PUBLIC_BASE_URL="https://jualinbox.com"
 pnpm docker:local:build
 pnpm docker:local:run
+
+# Shut down docker containers
+docker compose -f docker/docker-compose.local.yml --profile all down
 ```
 
 <br />
