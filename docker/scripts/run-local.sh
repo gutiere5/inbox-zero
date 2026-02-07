@@ -78,6 +78,6 @@ else
   # Export for docker-compose to use
   export GITHUB_USERNAME
   export FULL_IMAGE
-
-  docker compose -f "$COMPOSE_FILE" up
+  
+  NEXT_PUBLIC_BASE_URL=https://jualinbox.com docker compose -f "$COMPOSE_FILE" --profile all  up -d
 fi

@@ -107,12 +107,25 @@ fi
 echo "✅ Pre-flight checks passed"
 echo ""
 
+echo "Validating build environment..."
+if [ -z "${NEXT_PUBLIC_BASE_URL:-}" ]; then
+  echo "❌ Error: NEXT_PUBLIC_BASE_URL is not set."
+  echo "   This is required for production builds to prevent CSP errors."
+  echo "   Please set it before running the script:"
+  echo "   export NEXT_PUBLIC_BASE_URL=\"https://your-domain.com\""
+  exit 1
+fi
+echo "✅ NEXT_PUBLIC_BASE_URL is set to: ${NEXT_PUBLIC_BASE_URL}"
+echo 
+
 # Auto-detect GitHub username from gh CLI (can override with env var)
 GITHUB_USERNAME="${GITHUB_USERNAME:-$(gh api user -q .login)}"
 
 # Tag defaults to git SHA
 TAG="${TAG:-$(git rev-parse --short HEAD)}"
 FULL_IMAGE="${REGISTRY}/${GITHUB_USERNAME}/${IMAGE_NAME}"
+
+BUILD_ARGS="--build-arg NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}"
 
 echo "Building ${FULL_IMAGE}:${TAG}"
 
@@ -121,6 +134,7 @@ if [ "$LOCAL_ONLY" = true ]; then
 
   # Build with native Docker (avoids buildx container memory limits)
   docker build \
+    ${BUILD_ARGS} \
     --file "${DOCKERFILE}" \
     --tag "${FULL_IMAGE}:${TAG}" \
     --tag "${FULL_IMAGE}:latest" \
