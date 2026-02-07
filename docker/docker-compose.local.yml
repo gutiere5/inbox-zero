@@ -44,7 +44,7 @@ services:
     image: postgres:16
     restart: always
     env_file:
-      - path: ./apps/web/.env
+      - path: ../apps/web/.env
         required: false
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -84,7 +84,7 @@ services:
       - "${REDIS_HTTP_PORT:-8079}:80"
     image: hiett/serverless-redis-http:latest
     env_file:
-      - ./apps/web/.env
+      - ../apps/web/.env
     environment:
       SRH_MODE: env
       SRH_TOKEN: ${UPSTASH_REDIS_TOKEN}
