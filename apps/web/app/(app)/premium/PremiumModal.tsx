@@ -15,22 +15,6 @@ function PricingDialogHeader() {
   );
 }
 
-function EnterpriseFooter() {
-  return (
-    <div className="flex items-center justify-between rounded-3xl border border-gray-200 bg-white p-4">
-      <div>
-        <h3 className="font-semibold text-gray-900">Enterprise</h3>
-        <p className="text-sm text-gray-600">
-          SSO, on-premise deployment, and dedicated support for large teams.
-        </p>
-      </div>
-      <Button variant="outline" asChild>
-        <Link href="https://go.getinboxzero.com/sales">Speak to Sales</Link>
-      </Button>
-    </div>
-  );
-}
-
 export function usePremiumModal() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,7 +30,6 @@ export function usePremiumModal() {
             displayTiers={modalTiers}
             className="px-0 pt-0 lg:px-0"
           />
-          <EnterpriseFooter />
         </DialogContent>
       </Dialog>
     );

@@ -111,6 +111,7 @@ export function Footer({ className, variant = "default" }: FooterProps) {
               <Link
                 key={item.name}
                 href={item.href}
+                prefetch={false}
                 className="text-gray-400 hover:text-gray-500"
               >
                 <span className="sr-only">{item.name}</span>

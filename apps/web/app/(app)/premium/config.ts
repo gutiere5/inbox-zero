@@ -239,7 +239,7 @@ const enterpriseTier: Tier = {
     },
   ],
   cta: "Speak to sales",
-  ctaLink: "https://go.getinboxzero.com/sales",
+  ctaLink: `${env.NEXT_PUBLIC_BASE_URL}/sales`,
   mostPopular: false,
 };
 

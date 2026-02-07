@@ -12,7 +12,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-inboxzero}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-postgres}']
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -57,7 +57,7 @@ services:
       - all
 
   web:
-    image: ghcr.io/elie222/inbox-zero:latest
+    image: ${FULL_IMAGE:-ghcr.io/your-username/inbox-zero}:latest
     pull_policy: always
     env_file:
       - ./apps/web/.env
@@ -73,7 +73,7 @@ services:
     networks:
       - inbox-zero-network
     environment:
-      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-https://jualinbox.com}
       NEXT_PUBLIC_BYPASS_PREMIUM_CHECKS: ${NEXT_PUBLIC_BYPASS_PREMIUM_CHECKS:-true}
       NEXT_PUBLIC_EMAIL_SEND_ENABLED: ${NEXT_PUBLIC_EMAIL_SEND_ENABLED:-true}
       DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-inboxzero}?schema=public}

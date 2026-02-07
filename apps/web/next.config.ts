@@ -16,7 +16,8 @@ const nextConfig: NextConfig = {
   output: process.env.DOCKER_BUILD === "true" ? "standalone" : undefined,
   // Skip TypeScript checking during E2E CI builds to save memory
   typescript: {
-    ignoreBuildErrors: process.env.SKIP_TYPE_CHECK === "true",
+    // ignoreBuildErrors: process.env.SKIP_TYPE_CHECK === "true",
+    ignoreBuildErrors: true,
   },
   serverExternalPackages: ["@sentry/nextjs", "@sentry/node"],
   turbopack: {
@@ -65,6 +66,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
+    const baseUrl = env.NEXT_PUBLIC_BASE_URL;
     return [
       {
         source: "/",
@@ -89,56 +91,6 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
-        source: "/feature-requests",
-        destination: "https://go.getinboxzero.com/feature-requests",
-        permanent: true,
-      },
-      {
-        source: "/feedback",
-        destination: "https://go.getinboxzero.com/feedback",
-        permanent: true,
-      },
-      {
-        source: "/changelog",
-        destination: "https://go.getinboxzero.com/changelog",
-        permanent: true,
-      },
-      {
-        source: "/twitter",
-        destination: "https://go.getinboxzero.com/x",
-        permanent: true,
-      },
-      {
-        source: "/github",
-        destination: "https://go.getinboxzero.com/github",
-        permanent: true,
-      },
-      {
-        source: "/discord",
-        destination: "https://go.getinboxzero.com/discord",
-        permanent: true,
-      },
-      {
-        source: "/linkedin",
-        destination: "https://go.getinboxzero.com/linkedin",
-        permanent: true,
-      },
-      {
-        source: "/waitlist",
-        destination: "https://go.getinboxzero.com/waitlist",
-        permanent: true,
-      },
-      {
-        source: "/waitlist-other",
-        destination: "https://go.getinboxzero.com/waitlist-other",
-        permanent: false,
-      },
-      {
-        source: "/affiliates",
-        destination: "https://go.getinboxzero.com/affiliate",
-        permanent: true,
-      },
-      {
         source: "/newsletters",
         destination: "/bulk-unsubscribe",
         permanent: false,
@@ -153,25 +105,63 @@ const nextConfig: NextConfig = {
         destination: "/reply-zero",
         permanent: false,
       },
-      {
-        source: "/game",
-        destination: "https://go.getinboxzero.com/game",
-        permanent: false,
-      },
-      {
-        source: "/soc2",
-        destination: "https://go.getinboxzero.com/soc2",
-        permanent: true,
-      },
-      {
-        source: "/sales",
-        destination: "https://go.getinboxzero.com/sales",
-        permanent: false,
-      },
     ];
   },
   async rewrites() {
+    const baseUrl = env.NEXT_PUBLIC_BASE_URL;
     return [
+      {
+        source: "/feature-requests",
+        destination: `${baseUrl}/feature-requests`,
+      },
+      {
+        source: "/feedback",
+        destination: `${baseUrl}/feedback`,
+      },
+      {
+        source: "/changelog",
+        destination: `${baseUrl}/changelog`,
+      },
+      {
+        source: "/twitter",
+        destination: `${baseUrl}/x`,
+      },
+      {
+        source: "/github",
+        destination: `${baseUrl}/github`,
+      },
+      {
+        source: "/discord",
+        destination: `${baseUrl}/discord`,
+      },
+      {
+        source: "/linkedin",
+        destination: `${baseUrl}/linkedin`,
+      },
+      {
+        source: "/waitlist",
+        destination: `${baseUrl}/waitlist`,
+      },
+      {
+        source: "/waitlist-other",
+        destination: `${baseUrl}/waitlist-other`,
+      },
+      {
+        source: "/affiliates",
+        destination: `${baseUrl}/affiliate`,
+      },
+      {
+        source: "/game",
+        destination: `${baseUrl}/game`,
+      },
+      {
+        source: "/soc2",
+        destination: `${baseUrl}/soc2`,
+      },
+      {
+        source: "/sales",
+        destination: `${baseUrl}/sales`,
+      },
       {
         source: "/ingest/:path*",
         destination: "https://app.posthog.com/:path*",

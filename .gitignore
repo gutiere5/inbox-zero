@@ -94,3 +94,4 @@ copilot/environments/**/manifest.yml
 # browser QA flow results
 qa/browser-flows/results/*
 !qa/browser-flows/results/README.md
+.env*.local

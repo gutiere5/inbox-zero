@@ -152,6 +152,7 @@ export function Footer() {
                 key={item.name}
                 href={item.href}
                 target={item.target}
+                prefetch={false}
                 rel={
                   item.target === "_blank" ? "noopener noreferrer" : undefined
                 }
@@ -221,6 +222,7 @@ export function Footer() {
             <Link
               key={item.name}
               href={item.href}
+              prefetch={false}
               className="text-gray-400 hover:text-gray-500"
             >
               <span className="sr-only">{item.name}</span>
