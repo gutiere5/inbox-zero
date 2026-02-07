@@ -30,6 +30,14 @@
 
 To help you spend less time in your inbox, so you can focus on what matters most.
 
+## Starting Locally in Linux Server
+
+```bash
+export NEXT_PUBLIC_BASE_URL="https://jualinbox.com"
+pnpm docker:local:build
+pnpm docker:local:run
+```
+
 <br />
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Felie222%2Finbox-zero&env=AUTH_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,MICROSOFT_CLIENT_ID,MICROSOFT_CLIENT_SECRET,EMAIL_ENCRYPT_SECRET,EMAIL_ENCRYPT_SALT,UPSTASH_REDIS_URL,UPSTASH_REDIS_TOKEN,GOOGLE_PUBSUB_TOPIC_NAME,DATABASE_URL,NEXT_PUBLIC_BASE_URL)
@@ -45,7 +53,6 @@ To help you spend less time in your inbox, so you can focus on what matters most
 - **Email Analytics:** Track your activity and trends over time.
 - **Meeting Briefs (Beta):** Get personalized briefings before every meeting, pulling context from your email and calendar.
 - **Smart Filing (Early Access):** Automatically save email attachments to Google Drive or OneDrive.
-
 
 Learn more in our [docs](https://docs.getinboxzero.com).
 
@@ -144,33 +151,38 @@ The fastest way to get started is using [devcontainers](https://containers.dev/)
 #### Quick Start
 
 1. **Start PostgreSQL and Redis:**
+
    ```bash
    docker compose -f docker-compose.dev.yml up -d
    ```
 
 2. **Install dependencies and set up environment:**
+
    ```bash
    pnpm install
    ```
 
    **Option A: Interactive CLI** - Guides you through each step and auto-generates secrets
+
    ```bash
    npm run setup
    ```
 
    **Option B: Manual setup** - Copy the example file and edit it yourself
+
    ```bash
    cp apps/web/.env.example apps/web/.env
    # Generate secrets with: openssl rand -hex 32
    ```
 
 3. **Run database migrations:**
+
    ```bash
    cd apps/web
    pnpm prisma migrate dev
    ```
 
-5. **Run the development server:**
+4. **Run the development server:**
    ```bash
    pnpm dev
    ```
@@ -200,17 +212,16 @@ Create [new credentials](https://console.cloud.google.com/apis/credentials):
     3. Choose a name for your web client
     4. In Authorized JavaScript origins, add a URI and enter `http://localhost:3000` (replace `localhost:3000` with your domain in production)
     5. In `Authorized redirect URIs` enter (replace `localhost:3000` with your domain in production):
-      - `http://localhost:3000/api/auth/callback/google`
-      - `http://localhost:3000/api/google/linking/callback`
-      - `http://localhost:3000/api/google/calendar/callback` (only required for calendar integration)
-      - `http://localhost:3000/api/google/drive/callback` (only required for Google Drive integration)
+    - `http://localhost:3000/api/auth/callback/google`
+    - `http://localhost:3000/api/google/linking/callback`
+    - `http://localhost:3000/api/google/calendar/callback` (only required for calendar integration)
+    - `http://localhost:3000/api/google/drive/callback` (only required for Google Drive integration)
     6. Click `Create`.
     7. A popup will show up with the new credentials, including the Client ID and secret.
 3.  Update .env file:
     1. Copy the Client ID to `GOOGLE_CLIENT_ID`
     2. Copy the Client secret to `GOOGLE_CLIENT_SECRET`
 4.  Update [scopes](https://console.cloud.google.com/auth/scopes)
-
     1. Go to `Data Access` in the left sidebar (or click link above)
     2. Click `Add or remove scopes`
     3. Copy paste the below into the `Manually add scopes` box:
@@ -267,12 +278,12 @@ Then update the webhook endpoint in the [Google PubSub subscriptions dashboard](
 
 **Scheduled tasks:** Several features require periodic execution. If using Docker Compose, this is handled automatically by the cron container. Otherwise, set up cron jobs manually:
 
-| Endpoint | Frequency | Cron Expression | Description |
-|----------|-----------|-----------------|-------------|
-| `/api/cron/scheduled-actions` | Every minute | `* * * * *` | Executes due scheduled actions when QStash is not configured |
-| `/api/watch/all` | Every 6 hours | `0 */6 * * *` | Renews Gmail/Outlook push notification subscriptions |
-| `/api/meeting-briefs` | Every 15 minutes | `*/15 * * * *` | Sends pre-meeting briefings (optional, only if using meeting briefs feature) |
-| `/api/follow-up-reminders` | Every 30 minutes | `*/30 * * * *` | Processes follow-up reminder notifications (optional, only if using follow-up reminders feature) |
+| Endpoint                      | Frequency        | Cron Expression | Description                                                                                      |
+| ----------------------------- | ---------------- | --------------- | ------------------------------------------------------------------------------------------------ |
+| `/api/cron/scheduled-actions` | Every minute     | `* * * * *`     | Executes due scheduled actions when QStash is not configured                                     |
+| `/api/watch/all`              | Every 6 hours    | `0 */6 * * *`   | Renews Gmail/Outlook push notification subscriptions                                             |
+| `/api/meeting-briefs`         | Every 15 minutes | `*/15 * * * *`  | Sends pre-meeting briefings (optional, only if using meeting briefs feature)                     |
+| `/api/follow-up-reminders`    | Every 30 minutes | `*/30 * * * *`  | Processes follow-up reminder notifications (optional, only if using follow-up reminders feature) |
 
 When QStash isn't configured, background jobs are executed via internal API calls and scheduled actions run via cron. This works without QStash, but lacks built-in retries/deduping.
 
@@ -285,7 +296,6 @@ Go to [Microsoft Azure Portal](https://portal.azure.com/) and create a new Azure
 1. Navigate to Azure Active Directory
 2. Go to "App registrations" in the left sidebar or search it in the searchbar
 3. Click "New registration"
-
    1. Choose a name for your application
    2. Under "Supported account types" select one of:
       - **Multitenant (default):** "Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)" - allows any Microsoft account
@@ -301,7 +311,6 @@ Go to [Microsoft Azure Portal](https://portal.azure.com/) and create a new Azure
       - `http://localhost:3000/api/outlook/drive/callback` (only required for OneDrive integration)
 
 4. Get your credentials from the `Overview` tab:
-
    1. Copy the "Application (client) ID" → this is your `MICROSOFT_CLIENT_ID`
    2. If using single tenant, copy the "Directory (tenant) ID" → this is your `MICROSOFT_TENANT_ID`
    3. Go to "Certificates & secrets" in the left sidebar
@@ -311,13 +320,11 @@ Go to [Microsoft Azure Portal](https://portal.azure.com/) and create a new Azure
       - Copy the `Value` → this is your `MICROSOFT_CLIENT_SECRET` (**Important:** copy `Value`, not `Secret ID`)
 
 5. Configure API permissions:
-
    1. In the "Manage" menu click "API permissions" in the left sidebar
    2. Click "Add a permission"
    3. Select "Microsoft Graph"
    4. Select "Delegated permissions"
    5. Add the following permissions:
-
       - openid
       - profile
       - email
@@ -372,10 +379,10 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000 docker compose --profile all up --bui
 ### Self-Hosting
 
 For production deployments, see our guides:
+
 - [Self-Hosting Guide](docs/hosting/self-hosting.md)
 - [AWS EC2 Deployment](docs/hosting/ec2-deployment.md)
 - [AWS Copilot (ECS/Fargate)](docs/hosting/aws-copilot.md)
-
 
 ## Contributing to the project
 
